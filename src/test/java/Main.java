@@ -99,11 +99,22 @@ public class Main {
         Unknown unkCondition1 = new Unknown(pCondition1.getValue());
         PointerByReference pUnknown1 = new PointerByReference();
 
+        Guid.REFIID refiid1 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
+
+        WinNT.HRESULT result1 = unkCondition1.QueryInterface(refiid1, pUnknown1);
+        if (COMUtils.SUCCEEDED(result1)) {
+            String test = pUnknown1.toString();
+            String name = test;
+        }
+
+        Unknown unkCondition2 = new Unknown(pCondition2.getValue());
+        PointerByReference pUnknown2 = new PointerByReference();
+
         Guid.REFIID refiid2 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
 
         WinNT.HRESULT result2 = unkCondition1.QueryInterface(refiid2, pUnknown1);
         if (COMUtils.SUCCEEDED(result2)) {
-            String test = pUnknown1.toString();
+            String test = pUnknown2.toString();
             String name = test;
         }
 
