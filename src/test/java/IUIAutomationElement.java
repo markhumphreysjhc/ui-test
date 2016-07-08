@@ -2,7 +2,9 @@ import com.sun.jna.Function;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Guid;
 import com.sun.jna.platform.win32.WTypes;
+import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
@@ -99,6 +101,8 @@ public interface IUIAutomationElement {
     int get_CurrentName (/* [retval][out] */ PointerByReference sr);
     int get_CurrentClassName (/* [retval][out] */ PointerByReference sr);
     int FindAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
+    int FindFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
+    int getClickablePoint(WinDef.POINT clickable, IntByReference ok);
 
     public static class Converter {
         public static IUIAutomationElement PointerToIUIAutomationElement(final PointerByReference ptr) {
@@ -124,6 +128,11 @@ public interface IUIAutomationElement {
                     return f.invokeInt(new Object[]{interfacePointer});
                 }
 
+                public int FindFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
+                    Function f = Function.getFunction(vTable[5], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, scope, condition, sr});
+                }
+
                 public int FindAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
                     Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{interfacePointer, scope, condition, sr});
@@ -137,6 +146,11 @@ public interface IUIAutomationElement {
                 public /* [propget] */ int get_CurrentClassName (/* [retval][out] */ PointerByReference sr) {
                     Function f = Function.getFunction(vTable[30], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{interfacePointer, sr});
+                }
+
+                public int getClickablePoint(WinDef.POINT clickable, IntByReference ok) {
+                    Function f = Function.getFunction(vTable[52], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, clickable, ok});
                 }
             };
         }
