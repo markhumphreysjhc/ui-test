@@ -98,7 +98,7 @@ public interface IUIAutomationElement {
 
     int get_CurrentName (/* [retval][out] */ PointerByReference sr);
     int get_CurrentClassName (/* [retval][out] */ PointerByReference sr);
-    int FindAll (int scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
+    int FindAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
 
     public static class Converter {
         public static IUIAutomationElement PointerToIUIAutomationElement(final PointerByReference ptr) {
@@ -109,14 +109,11 @@ public interface IUIAutomationElement {
             return new IUIAutomationElement() {
 
                 // IUnknown
-
-                //     @Override
                 public WinNT.HRESULT QueryInterface(Guid.REFIID byValue, PointerByReference pointerByReference) {
                     Function f = Function.getFunction(vTable[0], Function.ALT_CONVENTION);
                     return new WinNT.HRESULT(f.invokeInt(new Object[]{interfacePointer, byValue, pointerByReference}));
                 }
 
-                //   @Override
                 public int AddRef() {
                     Function f = Function.getFunction(vTable[1], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{interfacePointer});
@@ -127,7 +124,7 @@ public interface IUIAutomationElement {
                     return f.invokeInt(new Object[]{interfacePointer});
                 }
 
-                public int FindAll (int scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
+                public int FindAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
                     Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{interfacePointer, scope, condition, sr});
                 }

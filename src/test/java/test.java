@@ -127,7 +127,9 @@ public class test {
 
         PointerByReference pAll = new PointerByReference();
 
-        this.root.FindAll(TreeScope.Children, pTrueCondition1.getPointer(), pAll);
+        TreeScope scope = new TreeScope(TreeScope.TreeScope_Children);
+
+        this.root.FindAll(scope, pTrueCondition1.getPointer(), pAll);
 
         String here = "got here";
     }
