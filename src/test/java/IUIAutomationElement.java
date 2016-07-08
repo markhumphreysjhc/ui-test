@@ -98,6 +98,7 @@ public interface IUIAutomationElement {
 
     int get_CurrentName (/* [retval][out] */ PointerByReference sr);
     int get_CurrentClassName (/* [retval][out] */ PointerByReference sr);
+    int FindAll (int scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
 
     public static class Converter {
         public static IUIAutomationElement PointerToIUIAutomationElement(final PointerByReference ptr) {
@@ -124,6 +125,11 @@ public interface IUIAutomationElement {
                 public int Release() {
                     Function f = Function.getFunction(vTable[2], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{interfacePointer});
+                }
+
+                public int FindAll (int scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
+                    Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, scope, condition, sr});
                 }
 
                 public /* [propget] */ int get_CurrentName (/* [retval][out] */ PointerByReference sr) {

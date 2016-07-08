@@ -101,6 +101,8 @@ public interface IUIAutomation {
     int CreateAndCondition(Pointer condition1, Pointer condition2, PointerByReference condition);
     int CreatePropertyCondition(int propertyId, Variant.VARIANT value, PointerByReference condition);
     int CreateOrCondition(Pointer condition1, Pointer condition2, PointerByReference condition);
+    int CreateTrueCondition(PointerByReference condition);
+    int CreateFalseCondition(PointerByReference condition);
 
      /*
     Use this like:
@@ -173,6 +175,16 @@ public interface IUIAutomation {
                 public int CreateOrCondition(Pointer condition1, Pointer condition2, PointerByReference condition) {
                     Function f = Function.getFunction(vTable[UIA_CREATE_OR_CONDITION], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{interfacePointer, condition1, condition2, condition});
+                }
+
+                public int CreateTrueCondition(PointerByReference condition) {
+                    Function f = Function.getFunction(vTable[UIA_CREATE_TRUE_CONDITION], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, condition});
+                }
+
+                public int CreateFalseCondition(PointerByReference condition) {
+                    Function f = Function.getFunction(vTable[UIA_CREATE_FALSE_CONDITION], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, condition});
                 }
 
             };
