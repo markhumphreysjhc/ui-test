@@ -70,7 +70,6 @@ public class Main {
             IUIAutomation ia = IUIAutomation.Converter.PointerToIUIAutomation(pbr1);
 
             // Get the root element
-
             PointerByReference pRoot = new PointerByReference();
 
             ia.GetRootElement(pRoot);
@@ -94,8 +93,8 @@ public class Main {
 
         // I think this is the problem!!!! Variants bah
 
-        ia.CreatePropertyCondition(PropertyID.Name.getValue(), var1, pCondition1);
-        ia.CreatePropertyCondition(PropertyID.ControlType.getValue(), var2, pCondition2);
+        ia.CreatePropertyCondition(PropertyID.ControlType.getValue(), var1, pCondition1);
+        ia.CreatePropertyCondition(PropertyID.Name.getValue(), var2, pCondition2);
 
         Unknown unkCondition1 = new Unknown(pCondition1.getValue());
         PointerByReference pUnknown1 = new PointerByReference();
