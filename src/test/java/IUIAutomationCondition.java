@@ -90,8 +90,8 @@ public interface IUIAutomationCondition {
         public static IUIAutomationCondition PointerToIUIAutomationCondition(final PointerByReference ptr) {
             final Pointer interfacePointer = ptr.getValue();
             final Pointer vTablePointer = interfacePointer.getPointer(0);
-            final Pointer[] vTable = new Pointer[95];  //  82 + 3 from IUnknown
-            vTablePointer.read(0, vTable, 0, 85);
+            final Pointer[] vTable = new Pointer[85];  //  82 + 3 from IUnknown
+            vTablePointer.read(0, vTable, 0, vTable.length);
             return new IUIAutomationCondition() {
 
                 // IUnknown

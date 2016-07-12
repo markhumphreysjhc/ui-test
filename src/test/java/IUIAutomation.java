@@ -103,6 +103,7 @@ public interface IUIAutomation {
     int CreateOrCondition(Pointer condition1, Pointer condition2, PointerByReference condition);
     int CreateTrueCondition(PointerByReference condition);
     int CreateFalseCondition(PointerByReference condition);
+    int CompareElements(Pointer element1, Pointer element2, int same);
 
      /*
     Use this like:
@@ -113,6 +114,8 @@ public interface IUIAutomation {
 
     public static class Converter {
 
+        private static int UIA_COMPARE_ELEMENTS = 3;
+        private static int UIA_COMPARE_RUNTIME_IDS = 4;
         private static int UIA_GET_ROOT_ELEMENT = 5;
         private static int UIA_GET_ELEMENT_FROM_HANDLE = 6;
         private static int UIA_GET_FOCUSED_ELEMENT = 8;
@@ -125,7 +128,7 @@ public interface IUIAutomation {
         private static int UIA_GET_PATTERN_PROGRAMMATIC_NAME = 50;
         private static int UIA_ELEMENT_FROM_IACCESSIBLE = 56;
 
-        private static int UIAutomation_Methods  = 57; // 0-2 IUnknown, 3-57 IUIAutomation
+        private static int UIAutomation_Methods  = 58; // 0-2 IUnknown, 3-57 IUIAutomation
 
         private static Pointer myInterfacePointer;
 
@@ -157,6 +160,12 @@ public interface IUIAutomation {
                 }
 
                 // IUIAutomation actual (there are more obviously, not yet implemented(
+
+                public int CompareElements(Pointer element1, Pointer element2, int same) {
+                    Function f = Function.getFunction(vTable[UIA_COMPARE_ELEMENTS], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{myInterfacePointer, element1, element2, same});
+                }
+
                 public int GetRootElement(PointerByReference root) {
                     Function f = Function.getFunction(vTable[UIA_GET_ROOT_ELEMENT], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{myInterfacePointer, root});

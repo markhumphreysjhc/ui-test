@@ -1,22 +1,20 @@
 import com.sun.jna.Function;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Guid;
-import com.sun.jna.platform.win32.WTypes;
-import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * Created by HumphreysM on 06/07/2016.
+ * Created by HumphreysM on 12/07/2016.
  */
-public interface IUIAutomationElement {
+public interface IUIAutomationElementArray {
 
     /**
      * The interface IID for QueryInterface et al
      */
-    public final static Guid.IID IID_IUIAUTOMATION_ELEMENT = new Guid.IID(
-            "{D22108AA-8AC5-49A5-837B-37BBB3D7591E}");
+    public final static Guid.IID IID_IUIAUTOMATION_ELEMENT_ARRAY = new Guid.IID(
+            "{14314595-B4BC-4055-95F2-58F2E42C9855}");
 
     /**
      *
@@ -98,23 +96,20 @@ public interface IUIAutomationElement {
      */
     int Release();
 
-    int get_CurrentName (/* [retval][out] */ PointerByReference sr);
-    int get_CurrentClassName (/* [retval][out] */ PointerByReference sr);
-    int findAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
-    int findFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
-    int getClickablePoint(WinDef.POINT clickable, IntByReference ok);
+    int get_Length(IntByReference length); // 3
+
+    int GetElement(int index, PointerByReference element); // 4
 
     public static class Converter {
 
-        private static int UIAutomationElement_Methods  = 85; // 0-2 IUnknown, 3-85 IUIAutomationElement
+        private static int UIAutomationElementArray_Methods = 5; // 0-2 IUnknown, 3-4 IUIAutomationElement
 
-        public static IUIAutomationElement PointerToIUIAutomationElement(final PointerByReference ptr) {
+        public static IUIAutomationElementArray PointerToIUIAutomationElementArray(final PointerByReference ptr) {
             final Pointer interfacePointer = ptr.getValue();
             final Pointer vTablePointer = interfacePointer.getPointer(0);
-            final Pointer[] vTable = new Pointer[UIAutomationElement_Methods];
+            final Pointer[] vTable = new Pointer[UIAutomationElementArray_Methods];
             vTablePointer.read(0, vTable, 0, vTable.length);
-            return new IUIAutomationElement() {
-
+            return new IUIAutomationElementArray() {
                 // IUnknown
                 public WinNT.HRESULT QueryInterface(Guid.REFIID byValue, PointerByReference pointerByReference) {
                     Function f = Function.getFunction(vTable[0], Function.ALT_CONVENTION);
@@ -131,29 +126,14 @@ public interface IUIAutomationElement {
                     return f.invokeInt(new Object[]{interfacePointer});
                 }
 
-                public int findFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
-                    Function f = Function.getFunction(vTable[5], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, scope.value, condition, sr});
+                public int get_Length(IntByReference length) {
+                    Function f = Function.getFunction(vTable[3], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, length});
                 }
 
-                public int findAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
-                    Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, scope.value, condition, sr});
-                }
-
-                public /* [propget] */ int get_CurrentName (/* [retval][out] */ PointerByReference sr) {
-                    Function f = Function.getFunction(vTable[23], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, sr});
-                }
-
-                public /* [propget] */ int get_CurrentClassName (/* [retval][out] */ PointerByReference sr) {
-                    Function f = Function.getFunction(vTable[30], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, sr});
-                }
-
-                public int getClickablePoint(WinDef.POINT clickable, IntByReference ok) {
-                    Function f = Function.getFunction(vTable[52], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, clickable, ok});
+                public int GetElement(int index, PointerByReference element) {
+                    Function f = Function.getFunction(vTable[4], Function.ALT_CONVENTION);
+                    return f.invokeInt(new Object[]{interfacePointer, index, element});
                 }
             };
         }

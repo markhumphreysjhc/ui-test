@@ -2,6 +2,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.*;
 import com.sun.jna.platform.win32.COM.COMUtils;
 import com.sun.jna.platform.win32.COM.Unknown;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
@@ -39,6 +40,10 @@ public class test {
             ia.GetRootElement(pRoot);
 
             processRootElement(pRoot);
+
+   //         int same = -99;
+//
+  //          ia.CompareElements(pRoot.getValue(), pRoot.getValue(), same);
 
             getDesktopObject(ia);
         }
@@ -97,7 +102,7 @@ public class test {
 
         TreeScope scope = new TreeScope(TreeScope.TreeScope_Children);
 
-        this.root.findAll(scope, pTrueCondition1.getPointer(), pAll);
+        this.root.findAll(scope, pTrueCondition1.getValue(), pAll);
 
         // Get some conditions
         PointerByReference pCondition1 = new PointerByReference();
@@ -137,13 +142,35 @@ public class test {
 
         PointerByReference pCondition = new PointerByReference();
 
-        ia.CreateAndCondition(pCondition1.getPointer(), pCondition2.getPointer(), pCondition);
+        int resultAA = ia.CreateAndCondition(pCondition1.getValue(), pCondition2.getValue(), pCondition);
 
         String here = "got here";
 
         TreeScope scop1e = new TreeScope(TreeScope.TreeScope_Children);
 
-        this.root.findAll(scop1e, pCondition.getPointer(), pAll);
+        int resultAll = this.root.findAll(scop1e, pTrueCondition1.getValue(), pAll);
+
+        // What has come out of findAll ??
+
+        Unknown unkConditionA = new Unknown(pAll.getValue());
+        PointerByReference pUnknownA = new PointerByReference();
+
+        Guid.REFIID refiidA = new Guid.REFIID(IUIAutomationElementArray.IID_IUIAUTOMATION_ELEMENT_ARRAY);
+
+        WinNT.HRESULT resultA = unkConditionA.QueryInterface(refiidA, pUnknownA);
+        if (COMUtils.SUCCEEDED(resultA)) {
+            IUIAutomationElementArray collection =
+                    IUIAutomationElementArray.Converter.PointerToIUIAutomationElementArray(pUnknownA);
+
+            IntByReference ibr = new IntByReference();
+
+            collection.get_Length(ibr);
+
+            int value = ibr.getValue();
+
+            String here2 = "got here";
+        }
+
 
     }
 }
