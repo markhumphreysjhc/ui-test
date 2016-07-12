@@ -24,10 +24,11 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jna.version>4.2.1</jna.version>
+<!--        <jna.version>4.2.1</jna.version> -->
     </properties>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
@@ -38,6 +39,7 @@
             <artifactId>jna-platform</artifactId>
             <version>${jna.version}</version>
         </dependency>
+        -->
     </dependencies>
 
 </project>
