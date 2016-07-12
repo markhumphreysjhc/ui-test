@@ -105,10 +105,13 @@ public interface IUIAutomationElement {
     int getClickablePoint(WinDef.POINT clickable, IntByReference ok);
 
     public static class Converter {
+
+        private static int UIAutomationElement_Methods  = 84; // 0-2 IUnknown, 3-85 IUIAutomationElement
+
         public static IUIAutomationElement PointerToIUIAutomationElement(final PointerByReference ptr) {
             final Pointer interfacePointer = ptr.getValue();
             final Pointer vTablePointer = interfacePointer.getPointer(0);
-            final Pointer[] vTable = new Pointer[85];  //  82 + 3 from IUnknown
+            final Pointer[] vTable = new Pointer[UIAutomationElement_Methods];
             vTablePointer.read(0, vTable, 0, vTable.length);
             return new IUIAutomationElement() {
 

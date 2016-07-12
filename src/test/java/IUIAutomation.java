@@ -125,7 +125,7 @@ public interface IUIAutomation {
         private static int UIA_GET_PATTERN_PROGRAMMATIC_NAME = 50;
         private static int UIA_ELEMENT_FROM_IACCESSIBLE = 56;
 
-        private static int UIAutomation_Methods  = 58;
+        private static int UIAutomation_Methods  = 57; // 0-2 IUnknown, 3-57 IUIAutomation
 
         private static Pointer myInterfacePointer;
 
@@ -133,7 +133,7 @@ public interface IUIAutomation {
             myInterfacePointer = ptr.getValue();
             Pointer vTablePointer = myInterfacePointer.getPointer(0);
 
-            final Pointer[] vTable = new Pointer[UIAutomation_Methods];  //  55 + 3 from IUnknown
+            final Pointer[] vTable = new Pointer[UIAutomation_Methods];
             vTablePointer.read(0, vTable, 0, vTable.length);
             return new IUIAutomation() {
 
