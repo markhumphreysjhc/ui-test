@@ -76,23 +76,47 @@ public class test {
     }
 
     private void getDesktopObject(IUIAutomation ia) {
+        PointerByReference pTrueCondition1 = new PointerByReference();
+
+        ia.CreateTrueCondition(pTrueCondition1);
+
+        Unknown unkCondition3 = new Unknown(pTrueCondition1.getValue());
+        PointerByReference pUnknown3 = new PointerByReference();
+
+        Guid.REFIID refiid3 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
+
+        Unknown unkCondition1 = new Unknown(pTrueCondition1.getValue());
+        PointerByReference pUnknown1 = new PointerByReference();
+
+        WinNT.HRESULT result3 = unkCondition1.QueryInterface(refiid3, pUnknown1);
+        if (COMUtils.SUCCEEDED(result3)) {
+            String test = pUnknown1.toString();
+        }
+
+        PointerByReference pAll = new PointerByReference();
+
+        TreeScope scope = new TreeScope(TreeScope.TreeScope_Children);
+
+        this.root.findAll(scope, pTrueCondition1.getPointer(), pAll);
+
         // Get some conditions
         PointerByReference pCondition1 = new PointerByReference();
         PointerByReference pCondition2 = new PointerByReference();
 
-        Variant.VARIANT var1 = new Variant.VARIANT.ByReference();
-        Variant.VARIANT var2 = new Variant.VARIANT.ByReference();
+        Variant.VARIANT.ByValue var1 = new Variant.VARIANT.ByValue();
+        Variant.VARIANT.ByValue var2 = new Variant.VARIANT.ByValue();
 
         var1.setValue(Variant.VT_INT, ControlType.Window);
-        var2.setValue(Variant.VT_BSTR, new WTypes.BSTR("Form1"));
+      //  var2.setValue(Variant.VT_BSTR, new WTypes.BSTR("Form1"));
+      //  var1.setValue(Variant.VT_INT, ControlType.Button);
 
-        // I think this is the problem!!!! Variants bah
+        WTypes.BSTR sysAllocated = OleAuto.INSTANCE.SysAllocString("Form1");
+        var2.setValue(Variant.VT_BSTR, sysAllocated);
 
-        ia.CreatePropertyCondition(PropertyID.ControlType.getValue(), var1, pCondition1);
-        ia.CreatePropertyCondition(PropertyID.Name.getValue(), var2, pCondition2);
+        // I think this is the problem!!!! Variants bah - changing to not use the strings
 
-        Unknown unkCondition1 = new Unknown(pCondition1.getValue());
-        PointerByReference pUnknown1 = new PointerByReference();
+        int result11 = ia.CreatePropertyCondition(PropertyID.ControlType.getValue(), var1, pCondition1);
+        int result21 = ia.CreatePropertyCondition(PropertyID.Name.getValue(), var2, pCondition2);
 
         Guid.REFIID refiid1 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
 
@@ -111,26 +135,15 @@ public class test {
             String test = pUnknown2.toString();
         }
 
-        PointerByReference pTrueCondition1 = new PointerByReference();
+        PointerByReference pCondition = new PointerByReference();
 
-        ia.CreateTrueCondition(pTrueCondition1);
-
-        Unknown unkCondition3 = new Unknown(pTrueCondition1.getValue());
-        PointerByReference pUnknown3 = new PointerByReference();
-
-        Guid.REFIID refiid3 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
-
-        WinNT.HRESULT result3 = unkCondition1.QueryInterface(refiid3, pUnknown1);
-        if (COMUtils.SUCCEEDED(result3)) {
-            String test = pUnknown3.toString();
-        }
-
-        PointerByReference pAll = new PointerByReference();
-
-        TreeScope scope = new TreeScope(TreeScope.TreeScope_Children);
-
-        this.root.FindAll(scope, pTrueCondition1.getPointer(), pAll);
+        ia.CreateAndCondition(pCondition1.getPointer(), pCondition2.getPointer(), pCondition);
 
         String here = "got here";
+
+        TreeScope scop1e = new TreeScope(TreeScope.TreeScope_Children);
+
+        this.root.findAll(scop1e, pCondition.getPointer(), pAll);
+
     }
 }

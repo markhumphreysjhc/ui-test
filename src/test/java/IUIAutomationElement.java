@@ -100,16 +100,16 @@ public interface IUIAutomationElement {
 
     int get_CurrentName (/* [retval][out] */ PointerByReference sr);
     int get_CurrentClassName (/* [retval][out] */ PointerByReference sr);
-    int FindAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
-    int FindFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
+    int findAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
+    int findFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr);
     int getClickablePoint(WinDef.POINT clickable, IntByReference ok);
 
     public static class Converter {
         public static IUIAutomationElement PointerToIUIAutomationElement(final PointerByReference ptr) {
             final Pointer interfacePointer = ptr.getValue();
             final Pointer vTablePointer = interfacePointer.getPointer(0);
-            final Pointer[] vTable = new Pointer[95];  //  82 + 3 from IUnknown
-            vTablePointer.read(0, vTable, 0, 85);
+            final Pointer[] vTable = new Pointer[85];  //  82 + 3 from IUnknown
+            vTablePointer.read(0, vTable, 0, vTable.length);
             return new IUIAutomationElement() {
 
                 // IUnknown
@@ -128,14 +128,14 @@ public interface IUIAutomationElement {
                     return f.invokeInt(new Object[]{interfacePointer});
                 }
 
-                public int FindFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
+                public int findFirst (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
                     Function f = Function.getFunction(vTable[5], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, scope, condition, sr});
+                    return f.invokeInt(new Object[]{interfacePointer, scope.value, condition, sr});
                 }
 
-                public int FindAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
+                public int findAll (TreeScope scope, Pointer condition, /* [retval][out] */ PointerByReference sr) {
                     Function f = Function.getFunction(vTable[6], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, scope, condition, sr});
+                    return f.invokeInt(new Object[]{interfacePointer, scope.value, condition, sr});
                 }
 
                 public /* [propget] */ int get_CurrentName (/* [retval][out] */ PointerByReference sr) {

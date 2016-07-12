@@ -99,7 +99,7 @@ public interface IUIAutomation {
     int GetRootElement(PointerByReference root);
     int ElementFromHandle(WinDef.HWND hwnd, PointerByReference element);
     int CreateAndCondition(Pointer condition1, Pointer condition2, PointerByReference condition);
-    int CreatePropertyCondition(int propertyId, Variant.VARIANT value, PointerByReference condition);
+    int CreatePropertyCondition(int propertyId, Variant.VARIANT.ByValue value, PointerByReference condition);
     int CreateOrCondition(Pointer condition1, Pointer condition2, PointerByReference condition);
     int CreateTrueCondition(PointerByReference condition);
     int CreateFalseCondition(PointerByReference condition);
@@ -108,7 +108,7 @@ public interface IUIAutomation {
     Use this like:
     PointerByReference pbr=new PointerByReference();
     HRESULT result=SomeCOMObject.QueryInterface(IID_IUIAUTOMATION, pbr);
-    if(COMUtils.SUCCEEDED(result)) IUIAutomation isf=IUIAutomation.Converter.PointerToIUIAutomation(pbr);
+    if(COMUtils.SUCCEEDED(result)) IUIAutomation iua=IUIAutomation.Converter.PointerToIUIAutomation(pbr);
      */
 
     public static class Converter {
@@ -125,66 +125,71 @@ public interface IUIAutomation {
         private static int UIA_GET_PATTERN_PROGRAMMATIC_NAME = 50;
         private static int UIA_ELEMENT_FROM_IACCESSIBLE = 56;
 
+        private static int UIAutomation_Methods  = 58;
+
+        private static Pointer myInterfacePointer;
+
         public static IUIAutomation PointerToIUIAutomation(final PointerByReference ptr) {
-            final Pointer interfacePointer = ptr.getValue();
-            final Pointer vTablePointer = interfacePointer.getPointer(0);
-            final Pointer[] vTable = new Pointer[58];  //  55 + 3 from IUnknown
-            vTablePointer.read(0, vTable, 0, 58);
+            myInterfacePointer = ptr.getValue();
+            Pointer vTablePointer = myInterfacePointer.getPointer(0);
+
+            final Pointer[] vTable = new Pointer[UIAutomation_Methods];  //  55 + 3 from IUnknown
+            vTablePointer.read(0, vTable, 0, vTable.length);
             return new IUIAutomation() {
 
                 // IUnknown
 
-           //     @Override
+          //      @Override
                 public WinNT.HRESULT QueryInterface(Guid.REFIID byValue, PointerByReference pointerByReference) {
                     Function f = Function.getFunction(vTable[0], Function.ALT_CONVENTION);
-                    return new WinNT.HRESULT(f.invokeInt(new Object[]{interfacePointer, byValue, pointerByReference}));
+                    return new WinNT.HRESULT(f.invokeInt(new Object[]{myInterfacePointer, byValue, pointerByReference}));
                 }
 
-             //   @Override
+           //     @Override
                 public int AddRef() {
                     Function f = Function.getFunction(vTable[1], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer});
+                    return f.invokeInt(new Object[]{myInterfacePointer});
                 }
 
                 public int Release() {
                     Function f = Function.getFunction(vTable[2], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer});
+                    return f.invokeInt(new Object[]{myInterfacePointer});
                 }
 
                 // IUIAutomation actual (there are more obviously, not yet implemented(
                 public int GetRootElement(PointerByReference root) {
                     Function f = Function.getFunction(vTable[UIA_GET_ROOT_ELEMENT], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, root});
+                    return f.invokeInt(new Object[]{myInterfacePointer, root});
                 }
 
                 public int ElementFromHandle(WinDef.HWND hwnd, PointerByReference element) {
                     Function f = Function.getFunction(vTable[UIA_GET_ELEMENT_FROM_HANDLE], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, hwnd, element});
+                    return f.invokeInt(new Object[]{myInterfacePointer, hwnd, element});
                 }
 
-                public int CreatePropertyCondition(int propertyId, Variant.VARIANT value, PointerByReference condition) {
+                public int CreatePropertyCondition(int propertyId, Variant.VARIANT.ByValue value, PointerByReference condition) {
                     Function f = Function.getFunction(vTable[UIA_CREATE_PROPERTY_CONDITION], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, propertyId, value, condition});
+                    return f.invokeInt(new Object[]{myInterfacePointer, propertyId, value, condition});
                 }
 
                 public int CreateAndCondition(Pointer condition1, Pointer condition2, PointerByReference condition) {
                     Function f = Function.getFunction(vTable[UIA_CREATE_AND_CONDITION], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, condition1, condition2, condition});
+                    return f.invokeInt(new Object[]{myInterfacePointer, condition1, condition2, condition});
                 }
 
                 public int CreateOrCondition(Pointer condition1, Pointer condition2, PointerByReference condition) {
                     Function f = Function.getFunction(vTable[UIA_CREATE_OR_CONDITION], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, condition1, condition2, condition});
+                    return f.invokeInt(new Object[]{myInterfacePointer, condition1, condition2, condition});
                 }
 
                 public int CreateTrueCondition(PointerByReference condition) {
                     Function f = Function.getFunction(vTable[UIA_CREATE_TRUE_CONDITION], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, condition});
+                    return f.invokeInt(new Object[]{myInterfacePointer, condition});
                 }
 
                 public int CreateFalseCondition(PointerByReference condition) {
                     Function f = Function.getFunction(vTable[UIA_CREATE_FALSE_CONDITION], Function.ALT_CONVENTION);
-                    return f.invokeInt(new Object[]{interfacePointer, condition});
+                    return f.invokeInt(new Object[]{myInterfacePointer, condition});
                 }
 
             };
