@@ -4,6 +4,7 @@ import com.sun.jna.platform.win32.Guid;
 import com.sun.jna.platform.win32.Variant;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
@@ -103,7 +104,7 @@ public interface IUIAutomation {
     int CreateOrCondition(Pointer condition1, Pointer condition2, PointerByReference condition);
     int CreateTrueCondition(PointerByReference condition);
     int CreateFalseCondition(PointerByReference condition);
-    int CompareElements(Pointer element1, Pointer element2, int same);
+    int CompareElements(Pointer element1, Pointer element2, IntByReference same);
 
      /*
     Use this like:
@@ -161,7 +162,7 @@ public interface IUIAutomation {
 
                 // IUIAutomation actual (there are more obviously, not yet implemented(
 
-                public int CompareElements(Pointer element1, Pointer element2, int same) {
+                public int CompareElements(Pointer element1, Pointer element2, IntByReference same) {
                     Function f = Function.getFunction(vTable[UIA_COMPARE_ELEMENTS], Function.ALT_CONVENTION);
                     return f.invokeInt(new Object[]{myInterfacePointer, element1, element2, same});
                 }

@@ -41,9 +41,11 @@ public class test {
 
             processRootElement(pRoot);
 
-   //         int same = -99;
-//
-  //          ia.CompareElements(pRoot.getValue(), pRoot.getValue(), same);
+            IntByReference same = new IntByReference();
+
+            ia.CompareElements(pRoot.getValue(), pRoot.getValue(), same);
+
+            int value = same.getValue();
 
             getDesktopObject(ia);
         }
