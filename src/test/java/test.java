@@ -205,6 +205,30 @@ public class test {
 
                     if (name.equals("Notepad")) {
                         logger.info("Notepad is running");
+
+                        logger.info(name);
+
+                        // Try and get stuff from the notepad
+
+                        // framework
+                        PointerByReference sr0 = new PointerByReference();
+                        int result = element.get_CurrentFrameworkId(sr0);
+                        logger.info(sr0.getValue().getWideString(0));
+
+                        Variant.VARIANT.ByReference ibr0 = new Variant.VARIANT.ByReference();
+                        element.get_CurrentPropertyValue(PropertyID.ProcessId.getValue(), ibr0);
+                        logger.info(ibr0.getValue());
+
+                        // modal?
+
+                        // aria role
+                        PointerByReference aria = new PointerByReference();
+                        result = element.get_CurrentAriaRole(aria);
+                        logger.info(aria.getValue().getWideString(0));
+
+                        // orientation
+
+
                     }
                 }
             }
