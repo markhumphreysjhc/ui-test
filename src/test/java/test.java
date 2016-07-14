@@ -177,6 +177,38 @@ public class test {
             int value = ibr.getValue();
 
             logger.info("Collection length is " + value);
+
+            for (int a = 0; a < value; a++) {
+                PointerByReference pbr = new PointerByReference();
+
+                collection.GetElement(a, pbr);
+
+                // Now make a Element out of it
+
+                Unknown uElement = new Unknown(pbr.getValue());
+
+                Guid.REFIID refiidElement = new Guid.REFIID(IUIAutomationElement.IID);
+
+                WinNT.HRESULT result0 = uElement.QueryInterface(refiidElement, pbr);
+
+                if (COMUtils.SUCCEEDED(result0)) {
+                    IUIAutomationElement element =
+                            IUIAutomationElement.Converter.PointerToInterface(pbr);
+
+                    PointerByReference sr = new PointerByReference();
+
+                    element.get_CurrentClassName(sr);
+
+                    String name = sr.getValue().getWideString(0);
+
+                    logger.info("Found: " + name);
+
+                    if (name.equals("Notepad")) {
+                        logger.info("Notepad is running");
+                    }
+                }
+            }
+
         }
 
 
