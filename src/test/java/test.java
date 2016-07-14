@@ -199,7 +199,7 @@ public class test {
 
                     element.get_CurrentClassName(sr);
 
-                    String name = sr.getValue().getWideString(0);
+                  //  String name = sr.getValue().getWideString(0);
 
                     logger.info("Found: " + name);
 
