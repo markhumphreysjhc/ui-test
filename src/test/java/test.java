@@ -4,11 +4,14 @@ import com.sun.jna.platform.win32.COM.COMUtils;
 import com.sun.jna.platform.win32.COM.Unknown;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import org.apache.log4j.Logger;
 
 /**
  * Created by HumphreysM on 08/07/2016.
  */
 public class test {
+
+    protected Logger logger = Logger.getLogger(test.class.getName());
 
     public void run() {
         Ole32.INSTANCE.CoInitializeEx(Pointer.NULL, Ole32.COINIT_APARTMENTTHREADED);
@@ -19,7 +22,7 @@ public class test {
                 CLSID_CUIAutomation,
                 null,
                 WTypes.CLSCTX_SERVER,
-                IUIAutomation.IID_IUIAUTOMATION,
+                IUIAutomation.IID,
                 pbr);
 
         COMUtils.checkRC(hr);
@@ -28,11 +31,11 @@ public class test {
 
         PointerByReference pbr1 = new PointerByReference();
 
-        Guid.REFIID refiid = new Guid.REFIID(IUIAutomation.IID_IUIAUTOMATION);
+        Guid.REFIID refiid = new Guid.REFIID(IUIAutomation.IID);
 
         WinNT.HRESULT result = unk.QueryInterface(refiid, pbr1);
         if (COMUtils.SUCCEEDED(result)) {
-            IUIAutomation ia = IUIAutomation.Converter.PointerToIUIAutomation(pbr1);
+            IUIAutomation ia = IUIAutomation.Converter.PointerToInterface(pbr1);
 
             // The root element
             PointerByReference pRoot = new PointerByReference();
@@ -58,18 +61,20 @@ public class test {
     private void processRootElement(PointerByReference reference) {
         Unknown uRoot = new Unknown(reference.getValue());
 
-        Guid.REFIID refiidElement = new Guid.REFIID(IUIAutomationElement.IID_IUIAUTOMATION_ELEMENT);
+        Guid.REFIID refiidElement = new Guid.REFIID(IUIAutomationElement.IID);
 
         WinNT.HRESULT result0 = uRoot.QueryInterface(refiidElement, reference);
 
         if(COMUtils.SUCCEEDED(result0)) {
-            this.root = IUIAutomationElement.Converter.PointerToIUIAutomationElement(reference);
+            this.root = IUIAutomationElement.Converter.PointerToInterface(reference);
 
             PointerByReference sr = new PointerByReference();
 
             this.root.get_CurrentName(sr);
 
             String wideSR = sr.getValue().getWideString(0);
+
+            logger.info(wideSR);
 
             PointerByReference sr1 = new PointerByReference();
 
@@ -78,7 +83,8 @@ public class test {
             String wideSR1 = sr1.getValue().getWideString(0);
 
             String test = uRoot.toString();
-            String name = test;
+
+            logger.info(wideSR1);
         }
     }
 
@@ -90,7 +96,7 @@ public class test {
         Unknown unkCondition3 = new Unknown(pTrueCondition1.getValue());
         PointerByReference pUnknown3 = new PointerByReference();
 
-        Guid.REFIID refiid3 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
+        Guid.REFIID refiid3 = new Guid.REFIID(IUIAutomationCondition.IID);
 
         Unknown unkCondition1 = new Unknown(pTrueCondition1.getValue());
         PointerByReference pUnknown1 = new PointerByReference();
@@ -125,7 +131,7 @@ public class test {
         int result11 = ia.CreatePropertyCondition(PropertyID.ControlType.getValue(), var1, pCondition1);
         int result21 = ia.CreatePropertyCondition(PropertyID.Name.getValue(), var2, pCondition2);
 
-        Guid.REFIID refiid1 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
+        Guid.REFIID refiid1 = new Guid.REFIID(IUIAutomationCondition.IID);
 
         WinNT.HRESULT result1 = unkCondition1.QueryInterface(refiid1, pUnknown1);
         if (COMUtils.SUCCEEDED(result1)) {
@@ -135,7 +141,7 @@ public class test {
         Unknown unkCondition2 = new Unknown(pCondition2.getValue());
         PointerByReference pUnknown2 = new PointerByReference();
 
-        Guid.REFIID refiid2 = new Guid.REFIID(IUIAutomationCondition.IID_IUIAUTOMATION_CONDITION);
+        Guid.REFIID refiid2 = new Guid.REFIID(IUIAutomationCondition.IID);
 
         WinNT.HRESULT result2 = unkCondition1.QueryInterface(refiid2, pUnknown2);
         if (COMUtils.SUCCEEDED(result2)) {
@@ -157,12 +163,12 @@ public class test {
         Unknown unkConditionA = new Unknown(pAll.getValue());
         PointerByReference pUnknownA = new PointerByReference();
 
-        Guid.REFIID refiidA = new Guid.REFIID(IUIAutomationElementArray.IID_IUIAUTOMATION_ELEMENT_ARRAY);
+        Guid.REFIID refiidA = new Guid.REFIID(IUIAutomationElementArray.IID);
 
         WinNT.HRESULT resultA = unkConditionA.QueryInterface(refiidA, pUnknownA);
         if (COMUtils.SUCCEEDED(resultA)) {
             IUIAutomationElementArray collection =
-                    IUIAutomationElementArray.Converter.PointerToIUIAutomationElementArray(pUnknownA);
+                    IUIAutomationElementArray.Converter.PointerToInterface(pUnknownA);
 
             IntByReference ibr = new IntByReference();
 
@@ -170,7 +176,7 @@ public class test {
 
             int value = ibr.getValue();
 
-            String here2 = "got here";
+            logger.info("Collection length is " + value);
         }
 
 

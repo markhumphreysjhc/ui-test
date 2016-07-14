@@ -14,7 +14,7 @@ public interface IUIAutomation {
     /**
      * The interface IID for QueryInterface et al
      */
-    public final static Guid.IID IID_IUIAUTOMATION = new Guid.IID(
+    public final static Guid.IID IID = new Guid.IID(
             "{30CBE57D-D9D0-452A-AB13-7AC5AC4825EE}");
 
     /**
@@ -133,7 +133,7 @@ public interface IUIAutomation {
 
         private static Pointer myInterfacePointer;
 
-        public static IUIAutomation PointerToIUIAutomation(final PointerByReference ptr) {
+        public static IUIAutomation PointerToInterface(final PointerByReference ptr) {
             myInterfacePointer = ptr.getValue();
             Pointer vTablePointer = myInterfacePointer.getPointer(0);
 
