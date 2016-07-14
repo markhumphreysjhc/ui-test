@@ -219,7 +219,19 @@ public class test {
                         element.get_CurrentPropertyValue(PropertyID.ProcessId.getValue(), ibr0);
                         logger.info(ibr0.getValue());
 
-                        // modal?
+                        // Is a window pattern available
+                        Variant.VARIANT.ByReference ibr1 = new Variant.VARIANT.ByReference();
+                        element.get_CurrentPropertyValue(PropertyID.IsWindowPatternAvailable.getValue(), ibr1);
+
+                        // Seems to be no, but not sure why, as it IS a window
+                        logger.info(ibr1.getValue());
+
+                        // Is a table pattern available - should be false
+                        Variant.VARIANT.ByReference ibr10 = new Variant.VARIANT.ByReference();
+                        element.get_CurrentPropertyValue(PropertyID.IsTablePatternAvailable.getValue(), ibr10);
+
+                        // Seems to be no, but not sure why, as it IS a window
+                        logger.info(ibr10.getValue());
 
                         // aria role
                         PointerByReference aria = new PointerByReference();
